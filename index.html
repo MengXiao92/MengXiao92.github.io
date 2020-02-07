@@ -331,48 +331,22 @@
       
         
           
-            <p>数字电路设计的流程：</p>
-<p><strong>（1）算法或硬件架构设计与分析</strong> </p>
-<img src="../assets/%E6%95%B0%E5%AD%97%E8%8A%AF%E7%89%87%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E5%9B%BE-1581080025629.png" style="zoom:60%;" />
+          数字电路设计的流程：
+（1）算法或硬件架构设计与分析 
 
 
 
-<p>目的：完成芯片中数字部分高层次算法或架构析与建模，为硬件 提供一个正确软件功能模型，更为重要的是，通过大量高层次仿真和调试，为RTL实现提供总体性的设计指导。数字部分越复杂，这一点越重要。</p>
-<p>工具：MATLAB、C++、C、System C、System Verilog等。不同类型的芯片都有不同的选择，如数字信号处理类芯片，偏好MATLAB。</p>
-<p>特点：这部分工作至关重要，基本上奠定了整个芯片的性能和功耗的基础。这部分工作主要有具有通信、信号处理、计算机、软件专业背景的工程师完成，也有很多微电子专业背景的工程师参与。</p>
-<p><strong>（2）RTL实现</strong></p>
-<p>目的：依据第一步的结果，完成由高层次描述到Verilog HDL实现的过程。</p>
-<p>工具：Vim、Emac（二者不分前后顺序哦）</p>
-<p>特点：这一步能明显区别中训练有素的工程师和初学者。前者在写代码的过程中，具有极强的大局观，能够在书写Verilog HDL、描述逻辑功能的同时，还能够兼顾逻辑综合、STA、P&amp;R、DFX、功耗分析等多方面因素，最终提供一份另其他环节的工程师都赏心悦目的代码。初学者则处处留地雷，一不小心就引爆。  </p>
-<p> <strong>（3）功能验证</strong></p>
-<p>目的：在无延迟的理想情况在，通过大量的仿真，发现电路设计过程中的人为或者非人为引起的bug。主要指标是功能覆盖率。</p>
-<p>工具：Modelsim、VCS、NC-Verilog</p>
-<p>语言：C++、C、System C、System Verilog，基于UVM的方法学等。主要是System Verilog，一般哪个方便用哪个。</p>
-<p>特点：验证工程师近年来已经成为IC设计中需求量最大的岗位。这个阶段会占用大量的时间，数以月计</p>
-<p><strong>（4）逻辑综合</strong></p>
-<p>目的：将RTL代码映射为与工艺库相关的网表。</p>
-<p>工具：DesignCompiler、RTL Compiler。DesignCompiler在市场中占有垄断性地位，几乎成为逻辑综合的标准。</p>
-<p>特点：从芯片生产的角度来看，在该步骤之前，所有的工作都可近似看做一个虚拟性的，与现实无关。而从逻辑综合起，后续所有的工作都将与工艺的物理特性、电特性等息息相关。逻辑综合工具的功能主要是将VerilogHDL格式的文本映射为网表格式的文本，因此，它的功能等同于文本编译器。那么转换的方式有很多种，工具如何选取呢？逻辑综合过程中，整个文本格式的编译过程是在给定的人为约束条件下进行的，通过这些约束和设定的目标来指导工具完成Compiler的工作。所以，逻辑综合过程可以看成一个多目标（频率、面积、功耗）多约束的工程优化问题。该步骤中，通常会插入DFT、clock gating等。该步骤中通常加入Memory、各种IP等。为了在各种工艺库以及FPGA原型验证平台之间有一个更方便的移植，注意适当处理这些Memory、IP等的接口。该步骤中也可加入I/O、PLL等。</p>
-<p><strong>（5）静态时序分析</strong></p>
-<p>目的：相对动态仿真的类穷举式验证方法而言，从静态分析的角度，保证设计中所有的路径，满足内部时序单元对建立时间和保持时间的要求。即无论起点是什么，信号都可以被及时地传递到该路径的终点，并且在电路正常工作所必需的时间段内保持恒定。</p>
-<p>工具：PrimeTime、Tempus。PrimeTime在市场中占有垄断性地位，几乎成为STA的标准。</p>
-<p>特点：从逻辑综合开始，基本上每做一步大的调整，都会完成一次STA分析，以保证每步都能实现时序收敛。鉴于该特性非常重要，PrimeTime成为了Signoff的重要工具。所用到的SDC同逻辑综合；通常设计中会存在大量的违例路径，STA要修大量的setup、hold等，如何修这些违例，可以体现工作经验的重要性。此外，如果是前端修timing违例，一般会修的很快，但是会带来一个重大的问题，代码被前端修改后是否存在新的bug，还需重新仿真确认，仿真会消耗掉数以月计的时间，所以除非万不得已，不会找前端修timing。</p>
-<p><strong>（6）一致性验证</strong></p>
-<p>目的：RTL代码和逻辑综合后的网表都可以抽象为两幅由节点和边构成的图，一致性验证阶段采用了类似于直接比较两幅图是否一致的方法，来确定逻辑综合生成的网表是否正确。工具：Formality、Conformal </p>
-<p>输入文件：RTL代码、netlist（逻辑综合输出）、约束</p>
-<p>输出文件：match（两张图节点是否一致）和verify（计算得出两张图功能是否一致）的报告。</p>
-<p><strong>（7）数字后端流程</strong></p>
-<p>数字后端设计又称物理设计，将网标格式的文本转化成一个个有物理大小和位置的单元、连线。并且在实现过程中要满足面积、功耗、性能等要求。</p>
-<p>业界主流的后端工具来自synopsys、cadence两家公司，虽然两家公司工具不同但是基本流程相似。数字后端流程如图。</p>
-<p>Floor Plan：将Design导入后端工具后，检查输入文件是否缺少或者有错误。确保Design 正常initial后就可以进行调整Floor Plan。Floor Plan主要目的是要确定design的形状大小，出Pin的位置已经所有macro的摆放。</p>
-<p>Placement 目的是将所有std cell放入core area中，并且满足congestion和timing的要求。最简单的说可以分为两步：global 和detail place。global不考虑cell放的位置是否legal；detail place的时候会将cell放到附近legal的位置。在place过程中为了得到更好timing结果会对关键路径进行逻辑重组，删除buffer trees。随着工具的不断发展，目前place的引擎已经十分强大。例如C家的giga place，它采用新的算法slack-driven，通过计算真正timing而不是预估的timing来进行place，在place的同时进行优化。</p>
-<p>Prects 在Place之后CTS之前，我们会对进行一次setup timing优化。只优化setup，原因是clock tree还没做，所有clock都是ideal的。</p>
-<p>CTS：芯片中的时钟网络要驱动电路中所有的时序单元，所以时钟源端门单元带载很多，其负载延时很大并且不平衡，需要插入缓冲器减小负载和平衡延时。时钟网络及其上的缓冲器构成了时钟树。</p>
-<p>Routing：CTS之后整个芯片的大体结构已定。要将信号线通过金属连接起来。绕线过程主要完成一下几个目标。绕线过程中会考虑DRC和LVS，绕完后不会有DRC/LVS violations绕线过程中不会导致timing变差，也不会引入新的SI问题。考虑DFM，例如multi-cut via，线宽和线间距。</p>
-<p><strong>（8）时序仿真。</strong></p>
-<p>同功能仿真，只是将RTL代码替换为网表，然后需要加载SDF文件和工艺库模型。该步骤的目的在于，在延迟等近似实际工作的条件下，观察功能是否还能保持正确。</p>
 
-          
+目的：完成芯片中数字部分高层次算法或架构析与建模，为硬件 提供一个正确软件功能模型，更为重要的是，通过大量高层次仿真和调试，为RTL实现提供总体性的设计指导。数字部分越复杂，这一点越重要。
+工具：MATLAB、C++、C、System 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/29/%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%B5%81%E7%A8%8B/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -490,13 +464,20 @@
       
         
           
-            <h3 id="关于YOLOv3"><a href="#关于YOLOv3" class="headerlink" title="关于YOLOv3"></a>关于YOLOv3</h3><ol>
-<li>YOLO Layer</li>
-<li>anchor</li>
-<li></li>
-</ol>
+          关于YOLOv3
+YOLO Layer
+anchor
+
+
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/24/%E5%85%B3%E4%BA%8EYOLOv3/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -614,224 +595,22 @@
       
         
           
-            <p>python中列表的方法：</p>
-<p>方法是与对象（列表、数、字符串等）联系紧密的函数。通常，像下面这样调用方法：</p>
-<p><code>object.method(arguments)</code></p>
-<ol>
-<li><p>append</p>
-<p>append方法用于将一个对象附加到列表末尾</p>
-<p><code>&gt;&gt;lst=[1,2,3]</code></p>
-<p><code>&gt;&gt;lst.append(4)</code></p>
-<p><code>&gt;&gt;lst</code></p>
-<p><code>[1,2,3,4]</code></p>
-</li>
-<li><p>clear</p>
-<p>方法clear就是清空列表的内容</p>
-<p><code>&gt;&gt;lst=[1,2,3]</code></p>
-<p><code>&gt;&gt;lst.clear()</code></p>
-<p><code>&gt;&gt;lst</code></p>
-<p><code>[]</code></p>
-<p>这类似于切片赋值语句<code>lst[:] = []</code></p>
-</li>
-<li><p>copy</p>
-<p>方法copy复制列表。常规复制只是将另一个名称关联到列表。</p>
-<p><code>&gt;&gt;a = [1,2,3]</code></p>
-<p><code>&gt;&gt;b = a</code></p>
-<p><code>&gt;&gt;b[1] = 4</code></p>
-<p><code>a</code></p>
-<p><code>[1,4,3]</code></p>
-<p>要让a和b<strong>指向不同的列表</strong>，就必须将b关联到a的副本</p>
-<p><code>&gt;&gt;a = [1,2,3]</code></p>
-<p><code>&gt;&gt;b = a.copy()</code></p>
-<p><code>&gt;&gt;b[1] = 4</code></p>
-<p><code>a</code></p>
-<p><code>[1,2,3]</code></p>
-<p>这类似于使用<code>a[:]</code>或<code>list(a)</code>，它们也都是复制a。</p>
-</li>
-<li><p>count</p>
-<p>方法count计算指定的元素在列表中出现的次数。</p>
-</li>
-<li><p>extend</p>
-<p>方法extend让你能够同时将多个值附加到列表末尾，为此可将这些值组成的序列作为参数提供给方法extend。换而言之，你可使用一个列表来扩展另一个列表。</p>
-<p><code>&gt;&gt;a = [1,2,3]</code></p>
-<p><code>&gt;&gt;b = [4,5,6]</code></p>
-<p><code>&gt;&gt;a.extend(b)</code></p>
-<p><code>&gt;&gt;a</code></p>
-<p><code>[1,2,3,4,5,6]</code></p>
-<p>方法extend看起来类似于拼接，但存在一个重要差别，那就是将修改被扩展的序列。</p>
-</li>
-<li><p>index</p>
-<p>方法index在列表中查找指定值第一次出现的索引、</p>
-<p><code>&gt;&gt;knights = [&#39;We&#39;,&#39;are&#39;,&#39;the&#39;,&#39;knights&#39;,&#39;who&#39;,&#39;say&#39;,&#39;ni&#39;]</code></p>
-<p><code>&gt;&gt;knights.index(&#39;who&#39;)</code></p>
-<p><code>4</code></p>
-</li>
-<li><p>insert</p>
-<p>方法insert用于将一个对象插入列表</p>
-<p><code>&gt;&gt;numbers = [1,2,3,5,6,7]</code></p>
-<p><code>&gt;&gt;numbers.insert(3,&#39;four&#39;)</code></p>
-<p><code>&gt;&gt;numbers</code></p>
-<p><code>[1,2,3,&#39;four&#39;,5,6,7]</code></p>
-</li>
-<li><p>pop</p>
-<p>方法pop从列表中删除一个元素（默认为最后一个元素），并返回这一个元素</p>
-<p><code>&gt;&gt;x = [1,2,3]</code></p>
-<p><code>&gt;&gt;x.pop()</code></p>
-<p><code>3</code></p>
-<p><code>&gt;&gt;x</code></p>
-<p><code>[1,2]</code></p>
-<p><code>&gt;&gt;x.pop(0)</code></p>
-<p><code>1</code></p>
-<p><code>&gt;&gt;x</code></p>
-<p><code>[2]</code></p>
-<p><strong>注意</strong>：pop是唯一既修改列表又返回一个非None值的列表方法</p>
-<p>push和pop是大家普遍接受的两种栈（stack）操作（加入和取走）的名称。python没有提供push，但可以使用append来替代。方法pop和append的效果相反，因此将刚弹出的值压入（或附加）后，得到的栈将与原来相同。</p>
-<p><code>&gt;&gt;x = [1, 2, 3]</code></p>
-<p><code>&gt;&gt;x.append(x.pop())</code></p>
-<p><code>&gt;&gt;x</code></p>
-<p><code>[1, 2, 3]</code></p>
-<p>提示：要创建先进先出（FIFO）的队列，可使用insert(0,…)代替append。另外，也可继续使用append，但用pop(0)替代pop()。一种更佳的解决方案是，使用模块collections中的deque。</p>
-</li>
-<li><p>remove</p>
-<p>方法remove用于删除第一个为指定值得元素。</p>
-<p><code>&gt;&gt;x = [&#39;to&#39;, &#39;be&#39;, &#39;or&#39;, &#39;not&#39;, &#39;to&#39;, &#39;be&#39;]</code></p>
-<p><code>&gt;&gt;x.remove(&#39;be&#39;)</code></p>
-<p><code>&gt;&gt;x</code></p>
-<p><code>[&#39;to&#39;, &#39;or&#39;, &#39;not&#39;, &#39;to&#39;, &#39;be&#39;]</code></p>
-<p>如你所见，这只删除了为指定值的第一个元素，无法删除列表中其他为指定值得元素。</p>
-<p>remove是就地修改且不返回值的方法之一。不同于pop的是，它修改列表，但不返回任何值。</p>
-</li>
-<li><p>reverse</p>
-<p>方法reverse按相反的顺序排列列表中的元素</p>
-<p><code>&gt;&gt;x = [1, 2, 3]</code></p>
-<p><code>&gt;&gt;x.reverse()</code></p>
-<p><code>&gt;&gt;x</code></p>
-<p><code>[3, 2, 1]</code></p>
-</li>
-<li><p>sort</p>
-<p>方法sort用于对列表就地排序。就地排序意外着对原来的列表进行修改，使其元素按顺序排列，而不是返回排序后的列表的副本。</p>
-<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
-<p><code>&gt;&gt; x.sort()</code></p>
-<p><code>&gt;&gt; x</code></p>
-<p><code>[1, 2, 4, 6, 7, 9]</code></p>
-<p>为获取排序后的列表的副本，正确的方法之一是先将y关联到x的副本，再对y进行排序</p>
-<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
-<p><code>&gt;&gt; y = x.copy()</code></p>
-<p><code>&gt;&gt; y.sort()</code></p>
-<p><code>&gt;&gt; x</code></p>
-<p><code>[4, 6, 2, 1, 7, 9]</code></p>
-<p><code>&gt;&gt; y</code></p>
-<p><code>[1, 2, 4, 6, 7, 9]</code></p>
-<p>另外一种方法是使用函数sorted()</p>
-<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
-<p><code>&gt;&gt; y = sorted(x)</code></p>
-<p><code>&gt;&gt; x</code></p>
-<p><code>[4, 6, 2, 1, 7, 9]</code></p>
-<p><code>&gt;&gt; y</code></p>
-<p><code>[1, 2, 4, 6, 7, 9]</code></p>
-</li>
-<li><p>高级排序</p>
-<p>方法sort()接受两个可选参数：key和reverse。这两个参数通常是按名称指定的，称为关键字参数。</p>
-<p>参数key类似于参数cmp: 你将其设置为一个用于排序的函数。然而，不会直接使用这个函数来判断一个元素是否比另一个元素小，而是使用它来为每个元素创建一个键，再根据这些键对元素进行排序。因此，要根据长度对元素进行排序，可将参数key设置为函数len。</p>
-<p>参数reverse，只需将其指定为一个真值（True或False），以指出是否要按相反的顺序对列表进行排序。</p>
-</li>
-</ol>
-<p>元组：不可修改的序列</p>
-<p>字符串的方法</p>
-<ol>
-<li><p>center</p>
-<p>方法center通过在两边添加填充字符（默认为空格）让字符串居中。</p>
-</li>
-<li><p>find</p>
-<p>方法find在字符串中查找字符串。如果找到，就返回子串的第一个字符的索引，否则返回-1。</p>
-<p><code>&gt;&gt;title = &quot;Monty Python&#39;s Flying Circus&quot;</code></p>
-<p><code>&gt;&gt;title.find(&#39;Monty&#39;)</code></p>
-<p><code>0</code></p>
-<p><code>&gt;&gt;title.find(&#39;Python&#39;)</code></p>
-<p><code>6</code></p>
-<p>注意：字符串方法find返回的并非布尔值。如果find返回0，就意味着它在索引0处找到了指定的子串。</p>
-<p>还可以指定搜索的起点和终点（它们都是可选的）。</p>
-</li>
-<li><p>join</p>
-<p>join是一个非常重要的字符串方法，其作用与split相反，用于合并序列的元素。</p>
-<p><code>&gt;&gt;dirs = &#39;&#39;,&#39;usr&#39;,&#39;bin&#39;,&#39;env&#39;</code></p>
-<p><code>&gt;&gt;&#39;/&#39;.join(dirs)</code></p>
-<p><code>&#39;/usr/bin/env&#39;</code></p>
-</li>
-<li><p>lower</p>
-<p>方法lower返回字符串的小写版本</p>
-</li>
-<li><p>replace</p>
-<p>方法replace将指定子串都替换为另一个字符串，并返回替换后的结果。</p>
-<p><code>&gt;&gt;&#39;This is a test&#39;.replace(&#39;is&#39;,eez)</code></p>
-<p><code>&#39;Theez eez a test&#39;</code></p>
-</li>
-<li><p>split</p>
-<p>split是一个非常重要的字符串方法，其作用域join相反，用于将字符串拆分为序列。</p>
-<p><code>&gt;&gt;&#39;1+2+3+4+5&#39;.split(&#39;+&#39;)</code></p>
-<p><code>[&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;]</code></p>
-<p><code>&gt;&gt;&#39;Using the default&#39;.split()</code></p>
-<p><code>[&#39;Using&#39;,&#39;the&#39;,&#39;default&#39;]</code></p>
-</li>
-<li><p>strip</p>
-<p>方法strip将字符串开头和末尾的空白（但不包括中间的空白）删除，并返回删除后的结果。</p>
-<p>还可以在一个字符串参数中指定要删除哪些字符。</p>
-</li>
-<li><p>translate</p>
-<p>方法translate与replace一样替换字符串的特定部分，但不同的是它只能进行但字符替换。</p>
-</li>
-<li><p>判断字符串是否满足特定的条件</p>
-<p>很多字符串方法都是以is打头，如isspace、isdigit和isupper，它们判断字符串是否具有特定的性质（如包含的字符全为空白、数字或大写）。如果字符串具备特定的性质，这些方法就返回True，否则返回False。</p>
-</li>
-</ol>
-<p>字典的方法</p>
-<ol>
-<li><p>clear</p>
-<p>方法clear删除所有的字典项，这种操作是就地执行的（就像list.sort一样），因此什么都不返回（或者说返回None）。</p>
-</li>
-<li><p>copy</p>
-<p>方法copy返回一个新字典，其包含的键-值对与原来的字典相同（这个方法执行的是浅复制，因为值本身是原件，而非副本）。</p>
-<p>当替换副本中的值时，原件不受影响。然而，如果修改副本中的值（就地修改而不是替换），原件也将发生变化，因为原件指向的也是被修改的值。</p>
-<p>为避免这种问题，一种办法是执行深复制，即同时复制值及其包含的所有值，等等。为此，可使用模块copy中的函数deepcopy。</p>
-</li>
-<li><p>fromkeys</p>
-<p>方法fromkeys创建一个新字典，其中包含指向的键，且每个键对应的值都是None。</p>
-</li>
-<li><p>get</p>
-<p>方法get为访问字典项提供了宽松的环境。通常，如果你试图访问字典中没有的项，将引发错误。</p>
-</li>
-<li><p>items</p>
-<p>方法items返回一个包含所有字典项的列表，其中每个元素都为（key，value）的形式。字典项在列表中的排列顺序不确定。</p>
-<p>返回值属于一种名为字典视图的特殊类型。字典视图可用于迭代。另外，还可确定其长度以及对其执行成员资格检查。视图的一个优点是不复制，它们始终是底层字典的反映，即便修改了底层字典亦如此。</p>
-</li>
-<li><p>keys</p>
-<p>方法keys返回一个字典视图，其中包含指定字典中的键。</p>
-</li>
-<li><p>pop</p>
-<p>方法pop可用于获取与指定键相关联的值，并将该键-值对从字典中删除。</p>
-<p><code>&gt;&gt;d = {&#39;x&#39;: 1,&#39;y&#39;: 2}</code></p>
-<p><code>&gt;&gt;d.pop(&#39;x&#39;)</code></p>
-<p><code>1</code></p>
-<p><code>&gt;&gt;d</code></p>
-<p><code>{&#39;y&#39;:2}</code></p>
-</li>
-<li><p>popitem</p>
-<p>方法popitem类似于list.pop，但list.pop弹出列表中的最后一个元素，而popitem随机的弹出一个字典项，因为字典项的顺序是不确定的，没有“最后一个元素”的概念。如果你要以高效地方式逐个删除并处理所有字典项，这可能很有用，因为这样无需先获取键列表。</p>
-<p>注意：如果希望方法popitem以可预测的顺序弹出字典项，请参阅模块collections中的OrderedDict类。</p>
-</li>
-<li><p>setdefault</p>
-<p>方法setdefault有点像get，因为它也获取于指定键相关联的值，但除此之外，setdefault还在字典不包含指定的键时，在字典中添加指定的键-值对。</p>
-<p>指定的键不存在时，setdefault返回指定的值并相应地更新字典。如果指定的键存在，就返回其值，并保持字典不变。与get一样，值是可选的；如果没有指定，默认为None。</p>
-</li>
-<li><p>update</p>
-<p>方法update使用一个字典中的项来更新另一个字典。</p>
-</li>
-<li><p>values</p>
-<p>方法values返回一个由字典中的值组成的字典视图。不同于方法keys，方法values返回的视图可能包含重复的值。</p>
-</li>
-</ol>
+          python中列表的方法：
+方法是与对象（列表、数、字符串等）联系紧密的函数。通常，像下面这样调用方法：
+object.method(arguments)
 
-          
+append
+append方法用于将一个对象附加到列表末尾
+&gt;&gt;lst=[1,2,3]
+&gt;&gt;lst.append(4)
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/24/python/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -949,21 +728,15 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/20/hello-world1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1081,22 +854,21 @@
       
         
           
-            <h3 id="关于损失函数"><a href="#关于损失函数" class="headerlink" title="关于损失函数"></a>关于损失函数</h3><p>L1 loss：</p>
-<p>L2 loss：</p>
-<p>smooth L1 loss：</p>
-<p>UNet网络的损失函数：</p>
-<p>数据增强的方法 data augmentation scheme</p>
-<p>shifting mirroring</p>
-<p>S. Gross and M. Wilber. Training and investigating residual nets. <a href="https://github.com/szagoruyko/cifar.torch" target="_blank" rel="noopener">https://github.com/szagoruyko/cifar.torch</a>.</p>
-<p>K. He, X. Zhang, S. Ren, and J. Sun. Deep residual learning for image recognition. In CVPR, 2016.</p>
-<p>G. Huang, Y. Sun, Z. Liu, D. Sedra, and K. Q. Weinberger. Deep networks with stochastic depth. In ECCV, 2016.</p>
-<p>M. Lin, Q. Chen, and S. Yan. Network in network. In ICLR,2014</p>
-<p>Dropout的思想：</p>
-<p>Dropout的思想是训练整体DNN，并平均整个集合的结果，而不是训练单个DNN。DNNs是以概率P舍弃部分神经元，其它神经元以概率q=1-p被保留，舍去的神经元的输出都被设置为零。</p>
-<p><strong>：</strong>经过上面屏蔽掉某些神经元，使其激活值为0以后，我们还需要对向量y1……y1000进行缩放，也就是乘以1/(1-p)。如果你在训练的时候，经过置0后，没有对y1……y1000进行缩放（rescale），那么在测试的时候，就需要对权重进行缩放 </p>
-<p> <a href="https://www.jianshu.com/p/cb9a7a7465b8" target="_blank" rel="noopener">https://www.jianshu.com/p/cb9a7a7465b8</a> </p>
-
-          
+          关于损失函数L1 loss：
+L2 loss：
+smooth L1 loss：
+UNet网络的损失函数：
+数据增强的方法 data augmentation scheme
+shifting mirroring
+S. Gross and M. Wilber. Training and investig
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/20/LossFunction/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1214,157 +986,18 @@
       
         
           
-            <h3 id="关于channel-prunning"><a href="#关于channel-prunning" class="headerlink" title="关于channel prunning"></a>关于channel prunning</h3><ol>
-<li><p><a href="http://openaccess.thecvf.com/content_ICCV_2017/papers/Liu_Learning_Efficient_Convolutional_ICCV_2017_paper.pdf" target="_blank" rel="noopener">Learning Efficient Convolutional Networks through Network Slimming</a></p>
-<p>1) reduce the model size;</p>
-<p>2) decrease the run-time memory footprint;</p>
-<p>3) lower the number of computing operations without compromising accuracy.</p>
-<p>在这篇论文中，提出了network slimming，一种简单高效地网络训练方案，能够解决在资源限制下部署大规模CNN网络的挑战（Model size、Run-time memory、Number of computing operations）。本文提出的方法通过对BN层的scaling factors进行L1正则化，能够很容易的实现并不会对网络结构造成改变。因为每一个scaling factor对应着一个明确的卷积层，所以使用L1正则化将BN层的scaling factors的值变为0，能够确定出无关紧要的channels。这样就实现了channel-level的剪枝，剪枝之后可以通过fine-tuning弥补网络剪枝带来的精度的下降。</p>
-<p>实验结果显示：这种方法相比于原始网络能够获得20x的模型大小的压缩，5x的运算量的减小，而且能够实现相同甚至更高的精度。The scaling factors act as the agents for channel selection.</p>
-<p><img src="E:%5CBlog%5Cblog%5Cchannelpruning.PNG" alt="Figure"></p>
-<p>Scaling Factors and Sparsity-induced Penalty.</p>
-<p>在每一个channel引入了一个scaling factor  $\gamma$ ，用于channel输出的倍乘。同时训练网络的权重和scaling factors（稀疏归一化）。最后减掉具有较小factors的channels，并对剪枝之后的网络进行fine-tune。此方法的训练的目标函数为<br>$$<br>L=\sum_{(x,y)}l(f(x,W),y)+\lambda\sum_{\gamma\in\Gamma}g(\gamma)<br>$$<br>其中$(x,y)$表示训练的输入和目标，$W$表示训练的权重，第一个求和对应于CNN的训练误差, $g(\cdot)$表示对scaling factor的稀疏引起的惩罚，$\lambda$用于平衡这两个方面。在本文中取$g(\cdot)=|s|$即L1范数，用于实现稀疏化，Subgradient descent is adopted as the optimization method for the nonsmooth L1 penalty term. An alternative option is to replace the L1 penalty with <strong>the smooth-L1 penalty</strong> [30] to avoid using sub-gradient at non-smooth point.</p>
-<p>multi-pass的方法：本文进一步延伸提出的single-pass的学习方案到multi-pass的方案。 network slimming算法会得到一个narrow的网络，我们可以继续使用整个训练的方法去进行channel prunning的训练从而得到一个更进一步紧凑的网络模型，如图2所示。实验结果显示这种multi-pass的方法能够得到更好的压缩结果。</p>
-<p><img src="E:%5CBlog%5Cblog%5C%E6%B5%81%E7%A8%8B%E5%9B%BE.PNG" alt="figure"></p>
-<p>Handling Cross Layer Connections and pre-activation structure.</p>
-<p>The network slimming process introduced above can be directly applied to most plain CNN architectures such as AlexNet [22] and VGGNet [31]. While some adaptations are required when it is applied to modern networks with cross layer connections and the pre-activation design such as ResNet [15] and DenseNet [17]. <strong>For these networks</strong>, <strong>the output of a layer may be treated as the input</strong><br><strong>of multiple subsequent layers, in which a BN layer is placed before the convolutional layer</strong>. In this case, the sparsity is achieved <strong>at the incoming end of a layer</strong>, i.e., the layer selectively uses a subset of channels it received. To harvest the parameter and computation savings at test time, we need<br>to place a channel selection layer to mask out insignificant channels we have identified.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">updateBN</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> model.modules():</span><br><span class="line">        <span class="keyword">if</span> isinstance(m, nn.BatchNorm2d):</span><br><span class="line">            m.weight.grad.data.add_(arg.s*torch.sign(m.weight.data))</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="center">CIFAR10-VGG16BN</th>
-<th align="center">Trained with Sparsity (1e-4)</th>
-<th align="center">Baseline</th>
-<th align="center">Pruned (0.7 Pruned)</th>
-<th align="center">Fine-tuned (40epochs)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Top1 Accuracy (%)</td>
-<td align="center">93.77</td>
-<td align="center">93.62</td>
-<td align="center">10.00</td>
-<td align="center">93.56</td>
-</tr>
-<tr>
-<td align="center">Parameters</td>
-<td align="center">20.04M</td>
-<td align="center">20.04M</td>
-<td align="center">2.42M</td>
-<td align="center">2.42M</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>Pruned Ratio</th>
-<th>0</th>
-<th>0.1</th>
-<th>0.2</th>
-<th>0.3</th>
-<th>0.4</th>
-<th>0.5</th>
-<th>0.6</th>
-<th>0.7</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Top1 Accuracy (%) without Fine-tuned</td>
-<td>93.77</td>
-<td>93.72</td>
-<td>93.76</td>
-<td>93.75</td>
-<td>93.75</td>
-<td>93.40</td>
-<td>37.83</td>
-<td>10.00</td>
-</tr>
-<tr>
-<td>Parameters(M) / macc(M)</td>
-<td>20.04/ 398.44</td>
-<td>15.9/ 349.22</td>
-<td>12.28/ 307.78</td>
-<td>9.12/ 272.94</td>
-<td>6.74/ 247.86</td>
-<td>4.62/ 231.86</td>
-<td>3.14/ 222.17</td>
-<td>2.42/ 210.84</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="center">Pruned Ratio</th>
-<th align="center">architecture</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center">[64, 64, ‘M’, 128, 128, ‘M’, 256, 256, 256, 256, ‘M’, 512, 512, 512, 512, ‘M’, 512, 512, 512, 512]</td>
-</tr>
-<tr>
-<td align="center">0.1</td>
-<td align="center">[60, 64, ‘M’, 128, 128, ‘M’, 256, 255, 253, 245, ‘M’, 436, 417, 425, 462, ‘M’, 463, 465, 472, 424]</td>
-</tr>
-<tr>
-<td align="center">0.2</td>
-<td align="center">[58, 64, ‘M’, 128, 128, ‘M’, 256, 255, 250, 233, ‘M’, 360, 336, 329, 398, ‘M’, 420, 412, 435, 341]</td>
-</tr>
-<tr>
-<td align="center">0.3</td>
-<td align="center">[56, 64, ‘M’, 128, 128, ‘M’, 256, 254, 249, 227, ‘M’, 284, 239, 244, 351, ‘M’, 369, 364, 384, 255]</td>
-</tr>
-<tr>
-<td align="center">0.4</td>
-<td align="center">[52, 64, ‘M’, 128, 128, ‘M’, 256, 254, 247, 218, ‘M’, 218, 162, 166, 294, ‘M’, 317, 315, 318, 165]</td>
-</tr>
-<tr>
-<td align="center">0.5</td>
-<td align="center">[52, 64, ‘M’, 128, 128, ‘M’, 256, 254, 245, 214, ‘M’, 179, 117, 116, 229, ‘M’, 228, 220, 210, 111]</td>
-</tr>
-<tr>
-<td align="center">0.6</td>
-<td align="center">[51, 64, ‘M’, 128, 128, ‘M’, 256, 254, 245, 213, ‘M’, 165, 85, 92, 153, ‘M’, 83, 86, 87, 111]</td>
-</tr>
-<tr>
-<td align="center">0.7</td>
-<td align="center">[49, 64, ‘M’, 128, 128, ‘M’, 256, 254, 234, 198, ‘M’, 114, 41, 24, 11, ‘M’, 14, 13, 19, 104]</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<p>​    </p>
-<table>
-<thead>
-<tr>
-<th align="center">CIFAR10-VGG16-BN</th>
-<th align="center">BaseLine</th>
-<th align="center">Trained with Sparsity (1e-4)</th>
-<th align="center">Pruned(0.7 pruned)</th>
-<th align="center">Fined-turn(40 epoch)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<ol>
-<li><a href="https://arxiv.org/pdf/1802.00124.pdf" target="_blank" rel="noopener">Rethinking the Smaller-Norm-Less-Informative Assumption in Channel Pruning of Convolution Layers</a></li>
-</ol>
-
-          
+          关于channel prunning
+Learning Efficient Convolutional Networks through Network Slimming
+1) reduce the model size;
+2) decrease the run-time memory footpr
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/19/NetworkSlimming/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1482,38 +1115,16 @@
       
         
           
-            <h3 id="本文主要介绍关于YOLOv3的剪枝方法："><a href="#本文主要介绍关于YOLOv3的剪枝方法：" class="headerlink" title="本文主要介绍关于YOLOv3的剪枝方法："></a>本文主要介绍关于YOLOv3的剪枝方法：</h3><p>trainning的优化器方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> torch.optim.lr_scheduler <span class="keyword">as</span> lr_scheduler</span><br><span class="line"><span class="comment"># optimizer</span></span><br><span class="line">pg0, pg1 = [], [] <span class="comment"># optimizer parameter groups</span></span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> dict(model.named_parameters()).items():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'Conv2d.weight'</span> <span class="keyword">in</span> k:</span><br><span class="line">        pg1 += [v] <span class="comment"># parameter group 1 (apply weight_decay)</span></span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">        pg0 += [v] <span class="comment"># parameter group 0</span></span><br><span class="line"><span class="keyword">if</span> opt.adam:</span><br><span class="line">    optimizer = optim.Adam(pg0, lr=hyp[<span class="string">'lr0'</span>])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    optimizer = optim.SGD(pg0, lr=hyp[<span class="string">'lr0'</span>], momentum=hyp[<span class="string">'momentum'</span>], nesterov=<span class="literal">True</span>)</span><br><span class="line">optimizer.add_param_group(&#123;<span class="string">'params'</span>:pg1, <span class="string">'weight_decay'</span>: hyp[<span class="string">'weight_decay'</span>]&#125;) <span class="comment"># add pg1 weith weight_decay</span></span><br><span class="line"><span class="keyword">del</span> pg0, pg1</span><br></pre></td></tr></table></figure>
-
-<p>pytorch 中常见的四种优化器 <code>随机梯度下降法(SGD)</code>, <code>标准动量优化算法(Momentum)</code>, <code>RMSProp算法</code>，<code>Adam算法</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">opt_SGD=torch.optim.SGD(net_SGD.parameters(),lr=LR)</span><br><span class="line">opt_Momentum=torch.optim.SGD(net_Momentum.parameters(),lr=LR,momentum=<span class="number">0.8</span>)</span><br><span class="line">opt_RMSprop=torch.optim.RMSprop(net_RMSprop.parameters(),lr=LR,alpha=<span class="number">0.9</span>)</span><br><span class="line">opt_Adam=torch.optim.Adam(net_Adam.parameters(),lr=LR,betas=(<span class="number">0.9</span>,<span class="number">0.99</span>))</span><br></pre></td></tr></table></figure>
-
-<p>torch.load(weight, map_location=device)</p>
-<p>稀疏模型的定义：parse_module_def —&gt; CBL_idx, _, prune_idx, shortcut_idx, _</p>
-<p>BNOptimizer(): 类，updateBN</p>
-<p>Calculate mAP: test.test()</p>
-<ol>
-<li><p>稀疏训练、</p>
-</li>
-<li><p>通道剪枝 – 基于BN层的gamma系数进行剪枝，稀疏正则项</p>
-<ol>
-<li><p>因为yolov3中有五组共23处shortcut连接，对应的是add操作，通道剪枝后如何保证shortcut的两个输入维度一致，这是必须考虑的问题。而Lam1360/YOLOv3-model-pruning对shortcut直连的层不进行剪枝，避免了维度处理问题，但它同样实现了较高剪枝率，对模型参数的减小有很大帮助 </p>
-<p><code>python prune.py --cfg cfg/my_cfg.cfg --data data/my_data.data --weights weights/last.pt --percent 0.85</code> </p>
-<p>进行微调</p>
-</li>
-<li><p>对涉及shortcut的卷积层也进行了剪枝，剪枝采用每组shortcut中第一个卷积层的mask，一共使用五种mask实现了五组shortcut相关卷积层的剪枝，进一步提高了剪枝率 </p>
-<p><code>python shortcut_prune.py --cfg cfg/my_cfg.cfg --data data/my_data.data --weights weights/last.pt --percent 0.6</code></p>
-</li>
-<li></li>
-</ol>
-</li>
-<li><p>层剪枝、</p>
-</li>
-<li><p>同时层剪枝和通道剪枝</p>
-</li>
-</ol>
-
-          
+          本文主要介绍关于YOLOv3的剪枝方法：trainning的优化器方法：
+123456789101112131415import torch.optim as optimimport torch.optim.lr_scheduler as lr_scheduler# optimizerpg0, pg
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/19/YOLOv3-channel_prunning/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1631,92 +1242,23 @@
       
         
           
-            <h3 id="最近需要做的事情"><a href="#最近需要做的事情" class="headerlink" title="最近需要做的事情"></a>最近需要做的事情</h3><ol>
-<li><p>整理GAN用于人脸匿名化</p>
-</li>
-<li><p>关于CGAN的小细节 GAN学习</p>
-</li>
-<li><p>关于YOLOv3的稀疏剪枝，通道剪枝，层剪枝 </p>
-<ol>
-<li><p><a href="https://github.com/ultralytics/yolov3/wiki/Example:-Transfer-Learning" target="_blank" rel="noopener">Transfer Learning</a>  </p>
-<p>This guide explains how to train your data with YOLOv3 <strong>using Transfer Learning</strong>. Transfer learning can be a useful way to quickly retrain YOLOv3 on new data without needing to retrain the entire network. We accomplish this by starting from the official YOLOv3 weights, and setting each layer’s <code>.requires_grad</code> field to false that we do not want to calculate gradients for and optimize </p>
-<p><code>python3 train.py --data data/coco_1cls.data --cfg cfg/yolov3-spp-1cls.cfg --weights weights/yolov3-spp.pt --transfer</code></p>
-</li>
-<li><p><a href="https://github.com/ultralytics/yolov3/wiki/Example:-Train-Single-Class" target="_blank" rel="noopener">Train Single Class</a> – Train on Custom Data（7 steps）、Visualize Results 、Reproduce Results</p>
-<p>This guide explains how to train your own <strong>single-class</strong> dataset with YOLOv3. </p>
-<p><code>python3 train.py --data coco_1cls.data --cfg yolov3-spp.cfg --batch 5 --accum 1 --nosave --name 1cls</code></p>
-<p><code>python3 train.py --data coco_1cls.data --cfg yolov3-spp-1cls.cfg --batch 5 --accum 1 --nosave --name 1cls_1clscfg</code></p>
-</li>
-<li><p><a href="https://github.com/ultralytics/yolov3/wiki/Example:-Train-Single-Image" target="_blank" rel="noopener">Train Single Image</a> </p>
-<p>This guide explains how to train your own <strong>single-image dataset</strong> with YOLOv3 </p>
-<p><code>python3 train.py --data coco_1img.data --weights &#39;&#39; --batch 1 --accum 1 --nosave --name 1img</code></p>
-</li>
-<li><p>Training  – Start Training – Resume Training – Plot Training</p>
-</li>
-<li><p>Image Augmentation  – Translation – Rotation – Shear – Scale – Reflection – HSV Saturation – HSV Internsity </p>
-</li>
-<li><p>Darknet Conversion  &lt;—&gt; pytorch</p>
-</li>
-<li><p>稀疏训练、通道剪枝、层剪枝、同时层剪枝和通道剪枝</p>
-</li>
-</ol>
-</li>
-</ol>
-<ol start="4">
-<li><p>关于kaggle题目DSTL的问题</p>
-</li>
-<li><p>数据结构+算法的学习 Leetcode刷题</p>
-</li>
-<li><p>Markdown用于blog的撰写，使用typora</p>
-</li>
-<li><p>COCO数据集的使用TBD</p>
-</li>
-<li><p>嘉楠耘智的K210使用</p>
-<ol>
-<li><p>KPU 是通用的神经网络处理器，它可以在低功耗的情况下实现卷积神经网络计算，实时获取被检测目 标的大小、坐标和种类，对人脸或者物体进行检测和分类。使用 kpu 时，必须结合 model compiler。 </p>
-</li>
-<li><p>• 支持主流训练框架按照特定限制规则训练出来的定点化模型 • 对网络层数无直接限制，支持每层卷积神经网络参数单独配置，包括输入输出通道数目、输入输 出行宽列高 • 支持两种卷积内核 1x1 和 3x3 • 支持任意形式的激活函数 • 实时工作时最大支持神经网络参数大小为 5.5MiB 到 5.9MiB • 非实时工作时最大支持网络参数大小为（Flash 容量-软件体积） </p>
-</li>
-<li><p>编程指南包括：FreeRTOS SDK编程指南，SDK的工具以文件的形式放出，包括cmake，lds，lib，src，third_party; 编译工程使用命令 cmake .. -DPROJ=<ProjectName> -DTOOLCHAIN=/opt/riscv-toolchain/bin &amp;&amp; make</p>
-</li>
-<li><p>软件方面：提供了并且开放了勘智K210软件工程师开发所需要的 SDK、调试工具、IDE，并且提供了 AI 加速器部分所需要的模型转换器(Model Compiler)，这可以帮助您从现有已经训练好TensorFlow/Keras/Darknet 模型转化到勘智K210所需要的模型格式。</p>
-</li>
-<li><p>IDE ：集成开发环境（Integrated Development Environment，简称IDE，也称为Integration Design Environment、Integration Debugging Environment）是一种辅助程序开发人员开发软件的应用软件。</p>
-<p>IDE通常包括编程语言编辑器、自动建立工具、通常还包括调试器。有些IDE包含编译器／解释器，如微软的Microsoft Visual Studio，有些则不包含，如Eclipse、SharpDevelop等，这些IDE是通过调用第三方编译器来实现代码的编译工作的。有时IDE还会包含版本控制系统和一些可以设计图形用户界面的工具。许多支持面向对象的现代化IDE还包括了类别浏览器、物件检视器、物件结构图。虽然目前有一些IDE支持多种编程语言（例如Eclipse、NetBeans、Microsoft Visual Studio），但是一般而言，IDE主要还是针对特定的编程语言而量身打造（例如Visual Basic）。</p>
-<p>SDK：<a href="http://baike.baidu.com/view/592963.htm" target="_blank" rel="noopener">软件开发工具包</a>广义上指辅助开发某一类软件的相关文档、范例和工具的集合。</p>
-</li>
-<li><p>勘智K210的编译工具：nncase <a href="https://github.com/kendryte/nncase" target="_blank" rel="noopener">https://github.com/kendryte/nncase</a> <code>ncc</code> 是 nncase 的命令行工具。它有两个命令： <code>compile</code> 和 <code>infer</code>。<code>compile</code> 命令将你训练好的模型 (<code>.tflite</code>, <code>.caffemodel</code>) 编译到 <code>.kmodel</code>。 <code>infer</code> 命令可以运行你的 kmodel，通常它被用来调试。ncc 会将你模型的输出张量按 <code>NCHW</code> 布局保存到 <code>.bin</code> 文件。 </p>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="TBD"><a href="#TBD" class="headerlink" title="TBD"></a>TBD</h3><table>
-<thead>
-<tr>
-<th>国籍</th>
-<th>省份</th>
-<th>市区</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>中国</td>
-<td>北京</td>
-<td>丰台</td>
-</tr>
-</tbody></table>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Hello World\n"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          最近需要做的事情
+整理GAN用于人脸匿名化
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">print(<span class="string">"Hello World\n"</span>)</span><br></pre></td></tr></table></figure>
+关于CGAN的小细节 GAN学习
 
-<p>$$<br>x^{y^z}=(1+{\rm e}^x)^{-2xy^w}<br>$$</p>
-<ul>
-<li>[ ]吃饭</li>
-<li>[ ]睡觉</li>
-<li>[ ]打豆</li>
-</ul>
-<p>H<del>2</del>O</p>
+关于YOLOv3的稀疏剪枝，通道剪枝，层剪枝 
 
-          
+Transfer Learning  
+This guide explains how to train your data with YOLOv3 using Tra
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/17/test/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1834,35 +1376,16 @@
       
         
           
-            <h3 id="本文主要介绍关于YOLOv3的剪枝方法："><a href="#本文主要介绍关于YOLOv3的剪枝方法：" class="headerlink" title="本文主要介绍关于YOLOv3的剪枝方法："></a>本文主要介绍关于YOLOv3的剪枝方法：</h3><p>trainning的优化器方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> torch.optim.lr_scheduler <span class="keyword">as</span> lr_scheduler</span><br><span class="line"><span class="comment"># optimizer</span></span><br><span class="line">pg0, pg1 = [], [] <span class="comment"># optimizer parameter groups</span></span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> dict(model.named_parameters()).items():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'Conv2d.weight'</span> <span class="keyword">in</span> k:</span><br><span class="line">        pg1 += [v] <span class="comment"># parameter group 1 (apply weight_decay)</span></span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">        pg0 += [v] <span class="comment"># parameter group 0</span></span><br><span class="line"><span class="keyword">if</span> opt.adam:</span><br><span class="line">    optimizer = optim.Adam(pg0, lr=hyp[<span class="string">'lr0'</span>])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    optimizer = optim.SGD(pg0, lr=hyp[<span class="string">'lr0'</span>], momentum=hyp[<span class="string">'momentum'</span>], nesterov=<span class="literal">True</span>)</span><br><span class="line">optimizer.add_param_group(&#123;<span class="string">'params'</span>:pg1, <span class="string">'weight_decay'</span>: hyp[<span class="string">'weight_decay'</span>]&#125;) <span class="comment"># add pg1 weith weight_decay</span></span><br><span class="line"><span class="keyword">del</span> pg0, pg1</span><br></pre></td></tr></table></figure>
-
-<p>pytorch 中常见的四种优化器 <code>随机梯度下降法(SGD)</code>, <code>标准动量优化算法(Momentum)</code>, <code>RMSProp算法</code>，<code>Adam算法</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">opt_SGD=torch.optim.SGD(net_SGD.parameters(),lr=LR)</span><br><span class="line">opt_Momentum=torch.optim.SGD(net_Momentum.parameters(),lr=LR,momentum=<span class="number">0.8</span>)</span><br><span class="line">opt_RMSprop=torch.optim.RMSprop(net_RMSprop.parameters(),lr=LR,alpha=<span class="number">0.9</span>)</span><br><span class="line">opt_Adam=torch.optim.Adam(net_Adam.parameters(),lr=LR,betas=(<span class="number">0.9</span>,<span class="number">0.99</span>))</span><br></pre></td></tr></table></figure>
-
-<p>torch.load(weight, map_location=device)</p>
-<p>稀疏模型的定义：parse_module_def —&gt; CBL_idx, _, prune_idx, shortcut_idx, _</p>
-<p>BNOptimizer(): 类，updateBN</p>
-<p>Calculate mAP: test.test()</p>
-<ol>
-<li><p>稀疏训练、</p>
-</li>
-<li><p>通道剪枝 – 基于BN层的gamma系数进行剪枝，稀疏正则项</p>
-<ol>
-<li><p>因为yolov3中有五组共23处shortcut连接，对应的是add操作，通道剪枝后如何保证shortcut的两个输入维度一致，这是必须考虑的问题。而Lam1360/YOLOv3-model-pruning对shortcut直连的层不进行剪枝，避免了维度处理问题，但它同样实现了较高剪枝率，对模型参数的减小有很大帮助 </p>
-<p><code>python prune.py --cfg cfg/my_cfg.cfg --data data/my_data.data --weights weights/last.pt --percent 0.85</code> </p>
-<p>进行微调</p>
-</li>
-<li></li>
-</ol>
-</li>
-<li><p>层剪枝、</p>
-</li>
-<li><p>同时层剪枝和通道剪枝</p>
-</li>
-</ol>
-
-          
+          本文主要介绍关于YOLOv3的剪枝方法：trainning的优化器方法：
+123456789101112131415import torch.optim as optimimport torch.optim.lr_scheduler as lr_scheduler# optimizerpg0, pg
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/11/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1980,8 +1503,15 @@
       
         
           
-            
           
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/11/test-my-site/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
