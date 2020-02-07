@@ -228,6 +228,621 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/29/%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%B5%81%E7%A8%8B/" itemprop="url">数字电路设计的流程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-29T08:14:28+08:00">
+                2019-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>数字电路设计的流程：</p>
+<p><img src="E:%5CBlog%5Cblog%5C%E6%95%B0%E5%AD%97%E8%8A%AF%E7%89%87%E8%AE%BE%E8%AE%A1%E6%B5%81%E7%A8%8B%E5%9B%BE.PNG" alt="数字电路设计流程图"></p>
+<p><strong>（1）算法或硬件架构设计与分析</strong> </p>
+<p>目的：完成芯片中数字部分高层次算法或架构析与建模，为硬件 提供一个正确软件功能模型，更为重要的是，通过大量高层次仿真和调试，为RTL实现提供总体性的设计指导。数字部分越复杂，这一点越重要。</p>
+<p>工具：MATLAB、C++、C、System C、System Verilog等。不同类型的芯片都有不同的选择，如数字信号处理类芯片，偏好MATLAB。</p>
+<p>特点：这部分工作至关重要，基本上奠定了整个芯片的性能和功耗的基础。这部分工作主要有具有通信、信号处理、计算机、软件专业背景的工程师完成，也有很多微电子专业背景的工程师参与。</p>
+<p><strong>（2）RTL实现</strong></p>
+<p>目的：依据第一步的结果，完成由高层次描述到Verilog HDL实现的过程。</p>
+<p>工具：Vim、Emac（二者不分前后顺序哦）</p>
+<p>特点：这一步能明显区别中训练有素的工程师和初学者。前者在写代码的过程中，具有极强的大局观，能够在书写Verilog HDL、描述逻辑功能的同时，还能够兼顾逻辑综合、STA、P&amp;R、DFX、功耗分析等多方面因素，最终提供一份另其他环节的工程师都赏心悦目的代码。初学者则处处留地雷，一不小心就引爆。  </p>
+<p> <strong>（3）功能验证</strong></p>
+<p>目的：在无延迟的理想情况在，通过大量的仿真，发现电路设计过程中的人为或者非人为引起的bug。主要指标是功能覆盖率。</p>
+<p>工具：Modelsim、VCS、NC-Verilog</p>
+<p>语言：C++、C、System C、System Verilog，基于UVM的方法学等。主要是System Verilog，一般哪个方便用哪个。</p>
+<p>特点：验证工程师近年来已经成为IC设计中需求量最大的岗位。这个阶段会占用大量的时间，数以月计</p>
+<p><strong>（4）逻辑综合</strong></p>
+<p>目的：将RTL代码映射为与工艺库相关的网表。</p>
+<p>工具：DesignCompiler、RTL Compiler。DesignCompiler在市场中占有垄断性地位，几乎成为逻辑综合的标准。</p>
+<p>特点：从芯片生产的角度来看，在该步骤之前，所有的工作都可近似看做一个虚拟性的，与现实无关。而从逻辑综合起，后续所有的工作都将与工艺的物理特性、电特性等息息相关。逻辑综合工具的功能主要是将VerilogHDL格式的文本映射为网表格式的文本，因此，它的功能等同于文本编译器。那么转换的方式有很多种，工具如何选取呢？逻辑综合过程中，整个文本格式的编译过程是在给定的人为约束条件下进行的，通过这些约束和设定的目标来指导工具完成Compiler的工作。所以，逻辑综合过程可以看成一个多目标（频率、面积、功耗）多约束的工程优化问题。该步骤中，通常会插入DFT、clock gating等。该步骤中通常加入Memory、各种IP等。为了在各种工艺库以及FPGA原型验证平台之间有一个更方便的移植，注意适当处理这些Memory、IP等的接口。该步骤中也可加入I/O、PLL等。</p>
+<p><strong>（5）静态时序分析</strong></p>
+<p>目的：相对动态仿真的类穷举式验证方法而言，从静态分析的角度，保证设计中所有的路径，满足内部时序单元对建立时间和保持时间的要求。即无论起点是什么，信号都可以被及时地传递到该路径的终点，并且在电路正常工作所必需的时间段内保持恒定。</p>
+<p>工具：PrimeTime、Tempus。PrimeTime在市场中占有垄断性地位，几乎成为STA的标准。</p>
+<p>特点：从逻辑综合开始，基本上每做一步大的调整，都会完成一次STA分析，以保证每步都能实现时序收敛。鉴于该特性非常重要，PrimeTime成为了Signoff的重要工具。所用到的SDC同逻辑综合；通常设计中会存在大量的违例路径，STA要修大量的setup、hold等，如何修这些违例，可以体现工作经验的重要性。此外，如果是前端修timing违例，一般会修的很快，但是会带来一个重大的问题，代码被前端修改后是否存在新的bug，还需重新仿真确认，仿真会消耗掉数以月计的时间，所以除非万不得已，不会找前端修timing。</p>
+<p><strong>（6）一致性验证</strong></p>
+<p>目的：RTL代码和逻辑综合后的网表都可以抽象为两幅由节点和边构成的图，一致性验证阶段采用了类似于直接比较两幅图是否一致的方法，来确定逻辑综合生成的网表是否正确。工具：Formality、Conformal </p>
+<p>输入文件：RTL代码、netlist（逻辑综合输出）、约束</p>
+<p>输出文件：match（两张图节点是否一致）和verify（计算得出两张图功能是否一致）的报告。</p>
+<p><strong>（7）数字后端流程</strong></p>
+<p>数字后端设计又称物理设计，将网标格式的文本转化成一个个有物理大小和位置的单元、连线。并且在实现过程中要满足面积、功耗、性能等要求。</p>
+<p>业界主流的后端工具来自synopsys、cadence两家公司，虽然两家公司工具不同但是基本流程相似。数字后端流程如图。</p>
+<p>Floor Plan：将Design导入后端工具后，检查输入文件是否缺少或者有错误。确保Design 正常initial后就可以进行调整Floor Plan。Floor Plan主要目的是要确定design的形状大小，出Pin的位置已经所有macro的摆放。</p>
+<p>Placement 目的是将所有std cell放入core area中，并且满足congestion和timing的要求。最简单的说可以分为两步：global 和detail place。global不考虑cell放的位置是否legal；detail place的时候会将cell放到附近legal的位置。在place过程中为了得到更好timing结果会对关键路径进行逻辑重组，删除buffer trees。随着工具的不断发展，目前place的引擎已经十分强大。例如C家的giga place，它采用新的算法slack-driven，通过计算真正timing而不是预估的timing来进行place，在place的同时进行优化。</p>
+<p>Prects 在Place之后CTS之前，我们会对进行一次setup timing优化。只优化setup，原因是clock tree还没做，所有clock都是ideal的。</p>
+<p>CTS：芯片中的时钟网络要驱动电路中所有的时序单元，所以时钟源端门单元带载很多，其负载延时很大并且不平衡，需要插入缓冲器减小负载和平衡延时。时钟网络及其上的缓冲器构成了时钟树。</p>
+<p>Routing：CTS之后整个芯片的大体结构已定。要将信号线通过金属连接起来。绕线过程主要完成一下几个目标。绕线过程中会考虑DRC和LVS，绕完后不会有DRC/LVS violations绕线过程中不会导致timing变差，也不会引入新的SI问题。考虑DFM，例如multi-cut via，线宽和线间距。</p>
+<p><strong>（8）时序仿真。</strong></p>
+<p>同功能仿真，只是将RTL代码替换为网表，然后需要加载SDF文件和工艺库模型。该步骤的目的在于，在延迟等近似实际工作的条件下，观察功能是否还能保持正确。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E5%85%B3%E4%BA%8EYOLOv3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/24/%E5%85%B3%E4%BA%8EYOLOv3/" itemprop="url">关于YOLOv3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-24T16:49:39+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="关于YOLOv3"><a href="#关于YOLOv3" class="headerlink" title="关于YOLOv3"></a>关于YOLOv3</h3><ol>
+<li>YOLO Layer</li>
+<li>anchor</li>
+<li></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/24/python/" itemprop="url">python</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-24T14:17:31+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>python中列表的方法：</p>
+<p>方法是与对象（列表、数、字符串等）联系紧密的函数。通常，像下面这样调用方法：</p>
+<p><code>object.method(arguments)</code></p>
+<ol>
+<li><p>append</p>
+<p>append方法用于将一个对象附加到列表末尾</p>
+<p><code>&gt;&gt;lst=[1,2,3]</code></p>
+<p><code>&gt;&gt;lst.append(4)</code></p>
+<p><code>&gt;&gt;lst</code></p>
+<p><code>[1,2,3,4]</code></p>
+</li>
+<li><p>clear</p>
+<p>方法clear就是清空列表的内容</p>
+<p><code>&gt;&gt;lst=[1,2,3]</code></p>
+<p><code>&gt;&gt;lst.clear()</code></p>
+<p><code>&gt;&gt;lst</code></p>
+<p><code>[]</code></p>
+<p>这类似于切片赋值语句<code>lst[:] = []</code></p>
+</li>
+<li><p>copy</p>
+<p>方法copy复制列表。常规复制只是将另一个名称关联到列表。</p>
+<p><code>&gt;&gt;a = [1,2,3]</code></p>
+<p><code>&gt;&gt;b = a</code></p>
+<p><code>&gt;&gt;b[1] = 4</code></p>
+<p><code>a</code></p>
+<p><code>[1,4,3]</code></p>
+<p>要让a和b<strong>指向不同的列表</strong>，就必须将b关联到a的副本</p>
+<p><code>&gt;&gt;a = [1,2,3]</code></p>
+<p><code>&gt;&gt;b = a.copy()</code></p>
+<p><code>&gt;&gt;b[1] = 4</code></p>
+<p><code>a</code></p>
+<p><code>[1,2,3]</code></p>
+<p>这类似于使用<code>a[:]</code>或<code>list(a)</code>，它们也都是复制a。</p>
+</li>
+<li><p>count</p>
+<p>方法count计算指定的元素在列表中出现的次数。</p>
+</li>
+<li><p>extend</p>
+<p>方法extend让你能够同时将多个值附加到列表末尾，为此可将这些值组成的序列作为参数提供给方法extend。换而言之，你可使用一个列表来扩展另一个列表。</p>
+<p><code>&gt;&gt;a = [1,2,3]</code></p>
+<p><code>&gt;&gt;b = [4,5,6]</code></p>
+<p><code>&gt;&gt;a.extend(b)</code></p>
+<p><code>&gt;&gt;a</code></p>
+<p><code>[1,2,3,4,5,6]</code></p>
+<p>方法extend看起来类似于拼接，但存在一个重要差别，那就是将修改被扩展的序列。</p>
+</li>
+<li><p>index</p>
+<p>方法index在列表中查找指定值第一次出现的索引、</p>
+<p><code>&gt;&gt;knights = [&#39;We&#39;,&#39;are&#39;,&#39;the&#39;,&#39;knights&#39;,&#39;who&#39;,&#39;say&#39;,&#39;ni&#39;]</code></p>
+<p><code>&gt;&gt;knights.index(&#39;who&#39;)</code></p>
+<p><code>4</code></p>
+</li>
+<li><p>insert</p>
+<p>方法insert用于将一个对象插入列表</p>
+<p><code>&gt;&gt;numbers = [1,2,3,5,6,7]</code></p>
+<p><code>&gt;&gt;numbers.insert(3,&#39;four&#39;)</code></p>
+<p><code>&gt;&gt;numbers</code></p>
+<p><code>[1,2,3,&#39;four&#39;,5,6,7]</code></p>
+</li>
+<li><p>pop</p>
+<p>方法pop从列表中删除一个元素（默认为最后一个元素），并返回这一个元素</p>
+<p><code>&gt;&gt;x = [1,2,3]</code></p>
+<p><code>&gt;&gt;x.pop()</code></p>
+<p><code>3</code></p>
+<p><code>&gt;&gt;x</code></p>
+<p><code>[1,2]</code></p>
+<p><code>&gt;&gt;x.pop(0)</code></p>
+<p><code>1</code></p>
+<p><code>&gt;&gt;x</code></p>
+<p><code>[2]</code></p>
+<p><strong>注意</strong>：pop是唯一既修改列表又返回一个非None值的列表方法</p>
+<p>push和pop是大家普遍接受的两种栈（stack）操作（加入和取走）的名称。python没有提供push，但可以使用append来替代。方法pop和append的效果相反，因此将刚弹出的值压入（或附加）后，得到的栈将与原来相同。</p>
+<p><code>&gt;&gt;x = [1, 2, 3]</code></p>
+<p><code>&gt;&gt;x.append(x.pop())</code></p>
+<p><code>&gt;&gt;x</code></p>
+<p><code>[1, 2, 3]</code></p>
+<p>提示：要创建先进先出（FIFO）的队列，可使用insert(0,…)代替append。另外，也可继续使用append，但用pop(0)替代pop()。一种更佳的解决方案是，使用模块collections中的deque。</p>
+</li>
+<li><p>remove</p>
+<p>方法remove用于删除第一个为指定值得元素。</p>
+<p><code>&gt;&gt;x = [&#39;to&#39;, &#39;be&#39;, &#39;or&#39;, &#39;not&#39;, &#39;to&#39;, &#39;be&#39;]</code></p>
+<p><code>&gt;&gt;x.remove(&#39;be&#39;)</code></p>
+<p><code>&gt;&gt;x</code></p>
+<p><code>[&#39;to&#39;, &#39;or&#39;, &#39;not&#39;, &#39;to&#39;, &#39;be&#39;]</code></p>
+<p>如你所见，这只删除了为指定值的第一个元素，无法删除列表中其他为指定值得元素。</p>
+<p>remove是就地修改且不返回值的方法之一。不同于pop的是，它修改列表，但不返回任何值。</p>
+</li>
+<li><p>reverse</p>
+<p>方法reverse按相反的顺序排列列表中的元素</p>
+<p><code>&gt;&gt;x = [1, 2, 3]</code></p>
+<p><code>&gt;&gt;x.reverse()</code></p>
+<p><code>&gt;&gt;x</code></p>
+<p><code>[3, 2, 1]</code></p>
+</li>
+<li><p>sort</p>
+<p>方法sort用于对列表就地排序。就地排序意外着对原来的列表进行修改，使其元素按顺序排列，而不是返回排序后的列表的副本。</p>
+<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
+<p><code>&gt;&gt; x.sort()</code></p>
+<p><code>&gt;&gt; x</code></p>
+<p><code>[1, 2, 4, 6, 7, 9]</code></p>
+<p>为获取排序后的列表的副本，正确的方法之一是先将y关联到x的副本，再对y进行排序</p>
+<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
+<p><code>&gt;&gt; y = x.copy()</code></p>
+<p><code>&gt;&gt; y.sort()</code></p>
+<p><code>&gt;&gt; x</code></p>
+<p><code>[4, 6, 2, 1, 7, 9]</code></p>
+<p><code>&gt;&gt; y</code></p>
+<p><code>[1, 2, 4, 6, 7, 9]</code></p>
+<p>另外一种方法是使用函数sorted()</p>
+<p><code>&gt;&gt; x = [4, 6, 2, 1, 7, 9]</code></p>
+<p><code>&gt;&gt; y = sorted(x)</code></p>
+<p><code>&gt;&gt; x</code></p>
+<p><code>[4, 6, 2, 1, 7, 9]</code></p>
+<p><code>&gt;&gt; y</code></p>
+<p><code>[1, 2, 4, 6, 7, 9]</code></p>
+</li>
+<li><p>高级排序</p>
+<p>方法sort()接受两个可选参数：key和reverse。这两个参数通常是按名称指定的，称为关键字参数。</p>
+<p>参数key类似于参数cmp: 你将其设置为一个用于排序的函数。然而，不会直接使用这个函数来判断一个元素是否比另一个元素小，而是使用它来为每个元素创建一个键，再根据这些键对元素进行排序。因此，要根据长度对元素进行排序，可将参数key设置为函数len。</p>
+<p>参数reverse，只需将其指定为一个真值（True或False），以指出是否要按相反的顺序对列表进行排序。</p>
+</li>
+</ol>
+<p>元组：不可修改的序列</p>
+<p>字符串的方法</p>
+<ol>
+<li><p>center</p>
+<p>方法center通过在两边添加填充字符（默认为空格）让字符串居中。</p>
+</li>
+<li><p>find</p>
+<p>方法find在字符串中查找字符串。如果找到，就返回子串的第一个字符的索引，否则返回-1。</p>
+<p><code>&gt;&gt;title = &quot;Monty Python&#39;s Flying Circus&quot;</code></p>
+<p><code>&gt;&gt;title.find(&#39;Monty&#39;)</code></p>
+<p><code>0</code></p>
+<p><code>&gt;&gt;title.find(&#39;Python&#39;)</code></p>
+<p><code>6</code></p>
+<p>注意：字符串方法find返回的并非布尔值。如果find返回0，就意味着它在索引0处找到了指定的子串。</p>
+<p>还可以指定搜索的起点和终点（它们都是可选的）。</p>
+</li>
+<li><p>join</p>
+<p>join是一个非常重要的字符串方法，其作用与split相反，用于合并序列的元素。</p>
+<p><code>&gt;&gt;dirs = &#39;&#39;,&#39;usr&#39;,&#39;bin&#39;,&#39;env&#39;</code></p>
+<p><code>&gt;&gt;&#39;/&#39;.join(dirs)</code></p>
+<p><code>&#39;/usr/bin/env&#39;</code></p>
+</li>
+<li><p>lower</p>
+<p>方法lower返回字符串的小写版本</p>
+</li>
+<li><p>replace</p>
+<p>方法replace将指定子串都替换为另一个字符串，并返回替换后的结果。</p>
+<p><code>&gt;&gt;&#39;This is a test&#39;.replace(&#39;is&#39;,eez)</code></p>
+<p><code>&#39;Theez eez a test&#39;</code></p>
+</li>
+<li><p>split</p>
+<p>split是一个非常重要的字符串方法，其作用域join相反，用于将字符串拆分为序列。</p>
+<p><code>&gt;&gt;&#39;1+2+3+4+5&#39;.split(&#39;+&#39;)</code></p>
+<p><code>[&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;]</code></p>
+<p><code>&gt;&gt;&#39;Using the default&#39;.split()</code></p>
+<p><code>[&#39;Using&#39;,&#39;the&#39;,&#39;default&#39;]</code></p>
+</li>
+<li><p>strip</p>
+<p>方法strip将字符串开头和末尾的空白（但不包括中间的空白）删除，并返回删除后的结果。</p>
+<p>还可以在一个字符串参数中指定要删除哪些字符。</p>
+</li>
+<li><p>translate</p>
+<p>方法translate与replace一样替换字符串的特定部分，但不同的是它只能进行但字符替换。</p>
+</li>
+<li><p>判断字符串是否满足特定的条件</p>
+<p>很多字符串方法都是以is打头，如isspace、isdigit和isupper，它们判断字符串是否具有特定的性质（如包含的字符全为空白、数字或大写）。如果字符串具备特定的性质，这些方法就返回True，否则返回False。</p>
+</li>
+</ol>
+<p>字典的方法</p>
+<ol>
+<li><p>clear</p>
+<p>方法clear删除所有的字典项，这种操作是就地执行的（就像list.sort一样），因此什么都不返回（或者说返回None）。</p>
+</li>
+<li><p>copy</p>
+<p>方法copy返回一个新字典，其包含的键-值对与原来的字典相同（这个方法执行的是浅复制，因为值本身是原件，而非副本）。</p>
+<p>当替换副本中的值时，原件不受影响。然而，如果修改副本中的值（就地修改而不是替换），原件也将发生变化，因为原件指向的也是被修改的值。</p>
+<p>为避免这种问题，一种办法是执行深复制，即同时复制值及其包含的所有值，等等。为此，可使用模块copy中的函数deepcopy。</p>
+</li>
+<li><p>fromkeys</p>
+<p>方法fromkeys创建一个新字典，其中包含指向的键，且每个键对应的值都是None。</p>
+</li>
+<li><p>get</p>
+<p>方法get为访问字典项提供了宽松的环境。通常，如果你试图访问字典中没有的项，将引发错误。</p>
+</li>
+<li><p>items</p>
+<p>方法items返回一个包含所有字典项的列表，其中每个元素都为（key，value）的形式。字典项在列表中的排列顺序不确定。</p>
+<p>返回值属于一种名为字典视图的特殊类型。字典视图可用于迭代。另外，还可确定其长度以及对其执行成员资格检查。视图的一个优点是不复制，它们始终是底层字典的反映，即便修改了底层字典亦如此。</p>
+</li>
+<li><p>keys</p>
+<p>方法keys返回一个字典视图，其中包含指定字典中的键。</p>
+</li>
+<li><p>pop</p>
+<p>方法pop可用于获取与指定键相关联的值，并将该键-值对从字典中删除。</p>
+<p><code>&gt;&gt;d = {&#39;x&#39;: 1,&#39;y&#39;: 2}</code></p>
+<p><code>&gt;&gt;d.pop(&#39;x&#39;)</code></p>
+<p><code>1</code></p>
+<p><code>&gt;&gt;d</code></p>
+<p><code>{&#39;y&#39;:2}</code></p>
+</li>
+<li><p>popitem</p>
+<p>方法popitem类似于list.pop，但list.pop弹出列表中的最后一个元素，而popitem随机的弹出一个字典项，因为字典项的顺序是不确定的，没有“最后一个元素”的概念。如果你要以高效地方式逐个删除并处理所有字典项，这可能很有用，因为这样无需先获取键列表。</p>
+<p>注意：如果希望方法popitem以可预测的顺序弹出字典项，请参阅模块collections中的OrderedDict类。</p>
+</li>
+<li><p>setdefault</p>
+<p>方法setdefault有点像get，因为它也获取于指定键相关联的值，但除此之外，setdefault还在字典不包含指定的键时，在字典中添加指定的键-值对。</p>
+<p>指定的键不存在时，setdefault返回指定的值并相应地更新字典。如果指定的键存在，就返回其值，并保持字典不变。与get一样，值是可选的；如果没有指定，默认为None。</p>
+</li>
+<li><p>update</p>
+<p>方法update使用一个字典中的项来更新另一个字典。</p>
+</li>
+<li><p>values</p>
+<p>方法values返回一个由字典中的值组成的字典视图。不同于方法keys，方法values返回的视图可能包含重复的值。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/20/hello-world1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -434,6 +1049,17 @@
             <h3 id="关于损失函数"><a href="#关于损失函数" class="headerlink" title="关于损失函数"></a>关于损失函数</h3><p>L1 loss：</p>
 <p>L2 loss：</p>
 <p>smooth L1 loss：</p>
+<p>UNet网络的损失函数：</p>
+<p>数据增强的方法 data augmentation scheme</p>
+<p>shifting mirroring</p>
+<p>S. Gross and M. Wilber. Training and investigating residual nets. <a href="https://github.com/szagoruyko/cifar.torch" target="_blank" rel="noopener">https://github.com/szagoruyko/cifar.torch</a>.</p>
+<p>K. He, X. Zhang, S. Ren, and J. Sun. Deep residual learning for image recognition. In CVPR, 2016.</p>
+<p>G. Huang, Y. Sun, Z. Liu, D. Sedra, and K. Q. Weinberger. Deep networks with stochastic depth. In ECCV, 2016.</p>
+<p>M. Lin, Q. Chen, and S. Yan. Network in network. In ICLR,2014</p>
+<p>Dropout的思想：</p>
+<p>Dropout的思想是训练整体DNN，并平均整个集合的结果，而不是训练单个DNN。DNNs是以概率P舍弃部分神经元，其它神经元以概率q=1-p被保留，舍去的神经元的输出都被设置为零。</p>
+<p><strong>：</strong>经过上面屏蔽掉某些神经元，使其激活值为0以后，我们还需要对向量y1……y1000进行缩放，也就是乘以1/(1-p)。如果你在训练的时候，经过置0后，没有对y1……y1000进行缩放（rescale），那么在测试的时候，就需要对权重进行缩放 </p>
+<p> <a href="https://www.jianshu.com/p/cb9a7a7465b8" target="_blank" rel="noopener">https://www.jianshu.com/p/cb9a7a7465b8</a> </p>
 
           
         
@@ -567,10 +1193,140 @@
 <p><img src="E:%5CBlog%5Cblog%5C%E6%B5%81%E7%A8%8B%E5%9B%BE.PNG" alt="figure"></p>
 <p>Handling Cross Layer Connections and pre-activation structure.</p>
 <p>The network slimming process introduced above can be directly applied to most plain CNN architectures such as AlexNet [22] and VGGNet [31]. While some adaptations are required when it is applied to modern networks with cross layer connections and the pre-activation design such as ResNet [15] and DenseNet [17]. <strong>For these networks</strong>, <strong>the output of a layer may be treated as the input</strong><br><strong>of multiple subsequent layers, in which a BN layer is placed before the convolutional layer</strong>. In this case, the sparsity is achieved <strong>at the incoming end of a layer</strong>, i.e., the layer selectively uses a subset of channels it received. To harvest the parameter and computation savings at test time, we need<br>to place a channel selection layer to mask out insignificant channels we have identified.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">updateBN</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> model.modules():</span><br><span class="line">        <span class="keyword">if</span> isinstance(m, nn.BatchNorm2d):</span><br><span class="line">            m.weight.grad.data.add_(arg.s*torch.sign(m.weight.data))</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">CIFAR10-VGG16BN</th>
+<th align="center">Trained with Sparsity (1e-4)</th>
+<th align="center">Baseline</th>
+<th align="center">Pruned (0.7 Pruned)</th>
+<th align="center">Fine-tuned (40epochs)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Top1 Accuracy (%)</td>
+<td align="center">93.77</td>
+<td align="center">93.62</td>
+<td align="center">10.00</td>
+<td align="center">93.56</td>
+</tr>
+<tr>
+<td align="center">Parameters</td>
+<td align="center">20.04M</td>
+<td align="center">20.04M</td>
+<td align="center">2.42M</td>
+<td align="center">2.42M</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Pruned Ratio</th>
+<th>0</th>
+<th>0.1</th>
+<th>0.2</th>
+<th>0.3</th>
+<th>0.4</th>
+<th>0.5</th>
+<th>0.6</th>
+<th>0.7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Top1 Accuracy (%) without Fine-tuned</td>
+<td>93.77</td>
+<td>93.72</td>
+<td>93.76</td>
+<td>93.75</td>
+<td>93.75</td>
+<td>93.40</td>
+<td>37.83</td>
+<td>10.00</td>
+</tr>
+<tr>
+<td>Parameters(M) / macc(M)</td>
+<td>20.04/ 398.44</td>
+<td>15.9/ 349.22</td>
+<td>12.28/ 307.78</td>
+<td>9.12/ 272.94</td>
+<td>6.74/ 247.86</td>
+<td>4.62/ 231.86</td>
+<td>3.14/ 222.17</td>
+<td>2.42/ 210.84</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">Pruned Ratio</th>
+<th align="center">architecture</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">[64, 64, ‘M’, 128, 128, ‘M’, 256, 256, 256, 256, ‘M’, 512, 512, 512, 512, ‘M’, 512, 512, 512, 512]</td>
+</tr>
+<tr>
+<td align="center">0.1</td>
+<td align="center">[60, 64, ‘M’, 128, 128, ‘M’, 256, 255, 253, 245, ‘M’, 436, 417, 425, 462, ‘M’, 463, 465, 472, 424]</td>
+</tr>
+<tr>
+<td align="center">0.2</td>
+<td align="center">[58, 64, ‘M’, 128, 128, ‘M’, 256, 255, 250, 233, ‘M’, 360, 336, 329, 398, ‘M’, 420, 412, 435, 341]</td>
+</tr>
+<tr>
+<td align="center">0.3</td>
+<td align="center">[56, 64, ‘M’, 128, 128, ‘M’, 256, 254, 249, 227, ‘M’, 284, 239, 244, 351, ‘M’, 369, 364, 384, 255]</td>
+</tr>
+<tr>
+<td align="center">0.4</td>
+<td align="center">[52, 64, ‘M’, 128, 128, ‘M’, 256, 254, 247, 218, ‘M’, 218, 162, 166, 294, ‘M’, 317, 315, 318, 165]</td>
+</tr>
+<tr>
+<td align="center">0.5</td>
+<td align="center">[52, 64, ‘M’, 128, 128, ‘M’, 256, 254, 245, 214, ‘M’, 179, 117, 116, 229, ‘M’, 228, 220, 210, 111]</td>
+</tr>
+<tr>
+<td align="center">0.6</td>
+<td align="center">[51, 64, ‘M’, 128, 128, ‘M’, 256, 254, 245, 213, ‘M’, 165, 85, 92, 153, ‘M’, 83, 86, 87, 111]</td>
+</tr>
+<tr>
+<td align="center">0.7</td>
+<td align="center">[49, 64, ‘M’, 128, 128, ‘M’, 256, 254, 234, 198, ‘M’, 114, 41, 24, 11, ‘M’, 14, 13, 19, 104]</td>
+</tr>
+</tbody></table>
 </li>
-<li><p><a href="https://arxiv.org/pdf/1802.00124.pdf" target="_blank" rel="noopener">Rethinking the Smaller-Norm-Less-Informative Assumption in Channel Pruning of Convolution Layers</a></p>
-</li>
-<li></li>
+</ol>
+<p>​    </p>
+<table>
+<thead>
+<tr>
+<th align="center">CIFAR10-VGG16-BN</th>
+<th align="center">BaseLine</th>
+<th align="center">Trained with Sparsity (1e-4)</th>
+<th align="center">Pruned(0.7 pruned)</th>
+<th align="center">Fined-turn(40 epoch)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ol>
+<li><a href="https://arxiv.org/pdf/1802.00124.pdf" target="_blank" rel="noopener">Rethinking the Smaller-Norm-Less-Informative Assumption in Channel Pruning of Convolution Layers</a></li>
 </ol>
 
           
@@ -709,6 +1465,9 @@
 <li><p>因为yolov3中有五组共23处shortcut连接，对应的是add操作，通道剪枝后如何保证shortcut的两个输入维度一致，这是必须考虑的问题。而Lam1360/YOLOv3-model-pruning对shortcut直连的层不进行剪枝，避免了维度处理问题，但它同样实现了较高剪枝率，对模型参数的减小有很大帮助 </p>
 <p><code>python prune.py --cfg cfg/my_cfg.cfg --data data/my_data.data --weights weights/last.pt --percent 0.85</code> </p>
 <p>进行微调</p>
+</li>
+<li><p>对涉及shortcut的卷积层也进行了剪枝，剪枝采用每组shortcut中第一个卷积层的mask，一共使用五种mask实现了五组shortcut相关卷积层的剪枝，进一步提高了剪枝率 </p>
+<p><code>python shortcut_prune.py --cfg cfg/my_cfg.cfg --data data/my_data.data --weights weights/last.pt --percent 0.6</code></p>
 </li>
 <li></li>
 </ol>
@@ -1267,7 +2026,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1308,7 +2067,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
